@@ -47,7 +47,7 @@ class RAD_class:
 
     def setTimer(self):
         print("Timer")
-        response = requests.post(url, json=self.packedMsg())  # 2.2 fnSendMsg => json
+        response = requests.post(url_1, json=self.packedMsg())  # 2.2 fnSendMsg => json
         rt = response.elapsed.total_seconds()
         print('(check)rspTime :' + str(rt))
         return rt

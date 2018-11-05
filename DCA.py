@@ -4,15 +4,14 @@ from STATE import *
 from ResultCode import *
 from globalVar import *
 
-
 class DCA_class:
     msgtype = SSP_DCAREQ
 
-    latitude = '32.882507'
-    longitude = '-117.234673'
-    nation = 'US'
-    state = 'CA'
-    city = "SD"
+    latitude = '32.879184'
+    longitude = '-117.235084'
+    nation = 'Q30'
+    state = 'Q99'
+    city = "Q16552"
 
     payload = {
         "latitude": latitude,
@@ -68,7 +67,7 @@ class DCA_class:
         global rcvdPayload
         rcvdType = self.json_response['header']['msgType'] # rcvdMsgType
         rcvdPayload = self.json_response['payload']
-        rcvdLength = len(str(self.rcvdPayload)) # rcvdLenOfPayload
+        # rcvdLength = len(str(self.rcvdPayload)) # rcvdLenOfPayload
         rcvdeId = self.json_response['header']['endpointId'] # rcvdEndpointId
         # expLen = rcvdLength - msg.header_size
 

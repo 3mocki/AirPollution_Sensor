@@ -56,12 +56,12 @@ class SIR_class:
         global rcvdPayload
         rcvdType = self.json_response['header']['msgType'] # rcvdMsgType
         rcvdPayload = self.json_response['payload']
-        rcvdLength = len(str(rcvdPayload)) # rcvdLenOfPayload
+        # rcvdLength = len(str(rcvdPayload)) # rcvdLenOfPayload
         rcvdeId = self.json_response['header']['endpointId'] # rcvdEndpointId
         # expLen = rcvdLength - msg.header_size
 
         if rcvdeId == self.eId: # rcvdEndpointId = fnGetTemporarySensorId
-            stateCheck = HALF_SSN_INFORMED_STATE
+            stateCheck = 1
             if stateCheck == RES_SUCCESS:
                 if rcvdType == self.msgtype:
                     # if rcvdLength == expLen:
