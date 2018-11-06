@@ -7,20 +7,12 @@ from STATE import *
 class DCA_class:
     msgtype = SSP_DCAREQ
 
-    lat = '32.88247'
-    lng = '-117.23484'
-    nat = 'Q30'
-    state = 'Q99'
-    city = "Q16552"
-
     payload = {
-        "latitude": lat,
-        "longitude": lng,
-        "tlv": {
-            "nation": nat,
-            "state": state,
-            "city": city
-        }
+        "lat": '32.892425',
+        "lng": '-117.234657',
+        "nat": 'Q30',
+        "state": 'Q99',
+        "city": 'Q16552'
     }
 
     rcvdPayload = None
@@ -29,6 +21,7 @@ class DCA_class:
     cId = ""
     MTI = ""
     TTI = ""
+    MOBF = ""
 
     def packedMsg(self):
         packedMsg = {
@@ -69,7 +62,7 @@ class DCA_class:
         rcvdeId = self.json_response['header']['endpointId'] # rcvdEndpointId
         # expLen = rcvdLength - msg.header_size
 
-        if rcvdeId == self.eId: # rcvdEndpointId = SSN
+        if rcvdeId == self.eId:
             stateCheck = 1
             if stateCheck == RES_SUCCESS:
                 if rcvdType == self.msgtype:
@@ -80,9 +73,11 @@ class DCA_class:
 
     def UnpackMsg(self):
         if self.json_response['payload']['resultCode'] == RESCODE_SSP_DCA_OK: # 4.1
-            self.cId = self.json_response['payload']['cId']
-            self.MTI = self.json_response['payload']['MTI']
-            self.TTI = self.json_response['payload']['TTI']
+            self.cId = self.json_response['payload']['cid']
+            self.MTI = self.json_response['payload']['mti']
+            self.TTI = self.json_response['payload']['tti']
+            self.MOBF = self.json_response['payload']['mobf']
+            print("(check)cId :" + str(self.cId))
             return RES_SUCCESS
         else:
             return RES_FAILED
