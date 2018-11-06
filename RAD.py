@@ -12,35 +12,28 @@ class RAD_class:
     # msgHeader[0]
     msgtype = SSP_RADTRN
 
-    # msgHeader[1:2]
-    payload_1 = {
-        "EAQDLT": EAQDLT
-    }
-    payload_2 = {
-        "AQDLT": AQLT
+    paylaod = {
+        "dataTupleLen" : '3',
+        "airQualityDataTuple" : [
+        	[1538291581, 24, 25, 26, 27, 28, 29, 34, 35, 36, 37, 38, 39, 40, 32.112223, -10.222422],
+            [1538291582, 24, 25, 26, 27, 28, 29, 34, 35, 36, 37, 38, 39, 40, 32.112223, -10.222422],
+            [1538291583, 24, 25, 26, 27, 28, 29, 34, 35, 36, 37, 38, 39, 40, 32.112223, -10.222422]
+        ]
     }
 
     # msgHeader[3:5]
     eId=""
 
     def packedMsg(self):
-        if self.currentAirData == None:
-            return self.currentAirData
-            quit()
-        else:
-            if len(self.currentAirData) > EDS:
-                payload = self.payload_1
-            else:
-                payload = self.payload_2
         packedMsg = {
             "header": {
                 "msgType" : self.msgtype,
-                "msgLen" : len(str(payload)),
+                "msgLen" : len(str(self.payload)),
                 "endpointId" : self.eId
             },
             "payload" : self.payload
         }
-        return packedMsg # 1.6 return packedMsg
+        return packedMsg
 
     def setTimer(self):
         print("Timer")
