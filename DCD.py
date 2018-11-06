@@ -1,15 +1,15 @@
 import requests, json
 from Msgtype import *
-from STATE import *
 from ResultCode import *
 from globalVar import *
+from STATE import *
 
 class DCD_class:
 
     msgtype = SSP_DCDNOT
     payload = None
     # eId is Connection ID
-    eId = '222222'
+    eId = ""
 
     def packedMsg(self):
         packedMsg = {
@@ -24,7 +24,7 @@ class DCD_class:
     def setTimer(self):
         global response, rt
         print("Timer Working")
-        response = requests.post(url, json=self.packedMsg())  # 2.2 fnSendMsg => json
+        response = requests.post(url_1, json=self.packedMsg())  # 2.2 fnSendMsg => json
         rt = response.elapsed.total_seconds()
         print('(check)rspTime :' + str(rt))
         return rt
@@ -46,12 +46,12 @@ class DCD_class:
         global rcvdPayload
         rcvdType = self.json_response['header']['msgType'] # rcvdMsgType
         rcvdPayload = self.json_response['payload']
-        rcvdLength = len(str(rcvdPayload)) # rcvdLenOfPayload
+        # rcvdLength = len(str(rcvdPayload)) # rcvdLenOfPayload
         rcvdeId = self.json_response['header']['endpointId'] # rcvdEndpointId
         # expLen = rcvdLength - msg.header_size
 
         if rcvdeId == self.eId: # rcvdEndpointId = fnGetTemporarySensorId
-            stateCheck = HALF_SSN_INFORMED_STATE
+            stateCheck = 1
             if stateCheck == RES_SUCCESS:
                 if rcvdType == self.msgtype:
                     # if rcvdLength == expLen:

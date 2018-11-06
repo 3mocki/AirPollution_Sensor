@@ -7,10 +7,7 @@ from Database import MySqlite
 
 class RAD_class:
 
-    air = MySqlite()
-
-
-    currentAirData = {'1993-01-04', '30', '1000', '15000', '20000', '300000', '5000', '100', '30', '30', '20', '10', '5', '30'  }
+    currentAirData = [1538291581, 24, 25, 26, 27, 28, 29, 34, 35, 36, 37, 38, 39, 40, 32.112223, -10.222422]
 
     # msgHeader[0]
     msgtype = SSP_RADTRN
@@ -38,7 +35,7 @@ class RAD_class:
         packedMsg = {
             "header": {
                 "msgType" : self.msgtype,
-                "msgLen" : len(str(self.payload)),
+                "msgLen" : len(str(payload)),
                 "endpointId" : self.eId
             },
             "payload" : self.payload
@@ -47,7 +44,7 @@ class RAD_class:
 
     def setTimer(self):
         print("Timer")
-        response = requests.post(url_1, json=self.packedMsg())  # 2.2 fnSendMsg => json
+        response = requests.post(url_2, json=self.packedMsg())  # 2.2 fnSendMsg => json
         rt = response.elapsed.total_seconds()
         print('(check)rspTime :' + str(rt))
         return rt
@@ -68,28 +65,22 @@ class RAD_class:
     def verifyMsgHeader(self):
         global rcvdPayload
         rcvdType = self.json_response['header']['msgType'] # rcvdMsgType
-        self.rcvdPayload = self.json_response['payload']
-        rcvdLength = len(str(self.rcvdPayload)) # rcvdLenOfPayload
+        rcvdPayload = self.json_response['payload']
+        # rcvdLength = len(str(self.rcvdPayload)) # rcvdLenOfPayload
         rcvdeId = self.json_response['header']['endpointId'] # rcvdEndpointId
         # expLen = rcvdLength - msg.header_size
 
         if rcvdeId == self.eId: # rcvdEndpointId = SSN
-            stateCheck = HALF_SSN_INFORMED_STATE
+            stateCheck = 1
             if stateCheck == RES_SUCCESS:
                 if rcvdType == self.msgtype:
                     # if rcvdLength == expLen:
-                    return self.rcvdPayload
+                    return rcvdPayload
         else:
             return RES_FAILED
 
-    def UnpackMsg(self):
-        if self.json_response['payload']['resultCode'] == RESCODE_SSP_DCA_OK: # 4.1
-            self.cId = self.json_response['payload']['cId']
-            self.MTI = self.json_response['payload']['MTI']
-            self.TTI = self.json_response['payload']['TTI']
-            return RES_SUCCESS
-        else:
-            return RES_FAILED
+    # def UnpackMsg(self):
+
 
     def init(self):
         print("(check)msgtype : " + str(self.msgtype))

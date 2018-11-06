@@ -10,5 +10,6 @@ RES_FAILED = 0
 RES_SUCCESS = 1
 TIMESTAMP_SIZE = 4
 
-# url_1 = 'http://dev.qualcomminst.com:8080/serverapi'
-url_1 = 'http://dev.qualcomminst.com:3500/serverapi'
+url_1 = 'http://dev.qualcomminst.com:8080/serverapi'
+url_2 = 'http://dev.qualcomminst.com:8080/serverdatatran'
+# url_1 = 'http://dev.qualcomminst.com:3500/serverapi'

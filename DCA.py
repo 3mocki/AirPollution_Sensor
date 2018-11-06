@@ -1,23 +1,23 @@
 import requests, json
 from Msgtype import *
-from STATE import *
 from ResultCode import *
 from globalVar import *
+from STATE import *
 
 class DCA_class:
     msgtype = SSP_DCAREQ
 
-    latitude = '32.879184'
-    longitude = '-117.235084'
-    nation = 'Q30'
+    lat = '32.88247'
+    lng = '-117.23484'
+    nat = 'Q30'
     state = 'Q99'
     city = "Q16552"
 
     payload = {
-        "latitude": latitude,
-        "longitude": longitude,
+        "latitude": lat,
+        "longitude": lng,
         "tlv": {
-            "nation": nation,
+            "nation": nat,
             "state": state,
             "city": city
         }
@@ -44,17 +44,16 @@ class DCA_class:
 
     def setTimer(self):
         global response, rt
-        print("Timer")
-        response = requests.post(url_1, json=self.packedMsg())  # 2.2 fnSendMsg => json
+        print("Timer Working")
+        response = requests.post(url_1, json=self.packedMsg())
         rt = response.elapsed.total_seconds()
         print('(check)rspTime :' + str(rt))
         return rt
 
-    # 3.1 fnRecvMsg()
     def rcvdMsg(self):
         if rt > 5:
             print("Retry Checking response time")
-            self.setTimer()  # 3.2
+            self.setTimer()
         else:
             self.verifyMsgHeader()
             if self.rcvdPayload != RES_FAILED:
@@ -72,7 +71,7 @@ class DCA_class:
         # expLen = rcvdLength - msg.header_size
 
         if rcvdeId == self.eId: # rcvdEndpointId = SSN
-            stateCheck = HALF_SSN_INFORMED_STATE
+            stateCheck = 1
             if stateCheck == RES_SUCCESS:
                 if rcvdType == self.msgtype:
                     # if rcvdLength == expLen:
