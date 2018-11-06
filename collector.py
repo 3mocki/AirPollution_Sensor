@@ -175,7 +175,7 @@ if __name__ == '__main__':
                     print(air_list[x] + ' : ' + str(ugm3) + 'ug/m^3')
                     print('*******************************')
 
-                time.sleep(sleepTime)
+            time.sleep(sleepTime)
 
             mySqlite = MySqlite('AirData')
             mySqlite.connectDB()

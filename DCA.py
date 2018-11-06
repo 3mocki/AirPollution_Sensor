@@ -30,7 +30,6 @@ class DCA_class:
     MTI = ""
     TTI = ""
 
-
     def packedMsg(self):
         packedMsg = {
             "header": {
