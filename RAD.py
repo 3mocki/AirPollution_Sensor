@@ -6,19 +6,16 @@ from globalVar import *
 from Database import MySqlite
 
 class RAD_class:
-
     currentAirData = [1538291581, 24, 25, 26, 27, 28, 29, 34, 35, 36, 37, 38, 39, 40, 32.112223, -10.222422]
 
     # msgHeader[0]
     msgtype = SSP_RADTRN
 
     paylaod = {
-        "dataTupleLen" : '3',
-        "airQualityDataTuple" : [
-        	[1538291581, 24, 25, 26, 27, 28, 29, 34, 35, 36, 37, 38, 39, 40, 32.112223, -10.222422],
-            [1538291582, 24, 25, 26, 27, 28, 29, 34, 35, 36, 37, 38, 39, 40, 32.112223, -10.222422],
-            [1538291583, 24, 25, 26, 27, 28, 29, 34, 35, 36, 37, 38, 39, 40, 32.112223, -10.222422]
-        ]
+        "dataTupleLen": '3',
+        "airQualityDataTuple": [
+            [1538291581, 24, 25, 26, 27, 28, 29, 34, 35, 36, 37, 38, 39, 40, 32.112223, -10.222422]
+            ]
     }
 
     # msgHeader[3:5]
@@ -27,17 +24,17 @@ class RAD_class:
     def packedMsg(self):
         packedMsg = {
             "header": {
-                "msgType" : self.msgtype,
-                "msgLen" : len(str(self.payload)),
-                "endpointId" : self.eId
+                "msgType": self.msgtype,
+                "msgLen": len(str(self.payload)),
+                "endpointId": self.eId
             },
-            "payload" : self.payload
+            "payload": self.payload
         }
         return packedMsg
 
     def setTimer(self):
-        print("Timer")
-        response = requests.post(url_2, json=self.packedMsg())  # 2.2 fnSendMsg => json
+        print("Timer Working")
+        response = requests.post(url_2, json=self.packedMsg())
         rt = response.elapsed.total_seconds()
         print('(check)rspTime :' + str(rt))
         return rt
