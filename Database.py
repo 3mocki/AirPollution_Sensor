@@ -3,6 +3,13 @@ from CalAQI import *
 
 class MySqlite:
 
+    calResNo2 = ""
+    calResO3 = ""
+    calResCo = ""
+    calResSo2 = ""
+    calResPm25 = ""
+    calResPm10 = ""
+
     # setting for db name
     def __init__(self, name):
         self.dbName = name + '.db'
@@ -25,15 +32,9 @@ class MySqlite:
                             ' (temp, no2, o3, co, so2, pm25, pm10, no2aqi, o3aqi, co_aqi, so2aqi, pm25aqi, pm10aqi) values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?);', (temp, no2, o3, co, so2, pm25, pm10, 0, 0, 0, 0, 0, 0))
 
         # based on a hour (DEFAULT)
-        if self.countData() > 10:
+        if self.countData() > 3600:
             self.cursor.execute(' DELETE FROM ' + self.AirDataTableName + ' WHERE NUM IN(SELECT NUM FROM ' + self.AirDataTableName + ' LIMIT 1) ')
         airAvg = self.getAvgData()
-        calResNo2 = 0
-        calResO3 = 0
-        calResCo = 0
-        calResSo2 = 0
-        calResPm25 = 0
-        calResPm10 = 0
         for x in range(0,6):
             if x == 0:
                 calResNo2 = int(CalNo2Aqi(airAvg[0]))
@@ -70,12 +71,3 @@ class MySqlite:
         self.cursor.close()
         self.db.commit()
         self.db.close()
-
-    # def makeCSVformat(self, alldata):
-    #     if alldata == True:
-    #         airDataCSV = ''
-    #         self.cursor.execute(' SELECT * from ' + self.allAirDataTableName + ' WHERE NUM = (SELECT MAX(NUM)  FROM ' + self.allAirDataTableName +');')
-    #         for row in self.cursor:
-    #             for x in range(1, 12):
-    #                 airDataCSV += str(row[x]) + ','
-    #         return airDataCSV
