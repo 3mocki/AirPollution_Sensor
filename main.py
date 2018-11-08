@@ -14,11 +14,11 @@ if __name__ == '__main__':
         dca.eId = sir.ssn
         dca.init()
 
-        print("-----------Generate RAD-----------")
-        rad = RAD_class()
-        rad.eId = dca.cId
+        while True:
+            print("-----------Generate RAD-----------")
+            rad = RAD_class()
+            rad.eId = dca.cId
 
-        for i in range(0, 100):
             print("-----------------------------------")
             rad.init()
             time.sleep(10)
