@@ -5,11 +5,11 @@ from Database import *
 # air list; ppm is O3 and CO // ppb is NO2, SO2
 air_list = ['no2', 'o3', 'co', 'so2', 'pm25', 'pm10']
 
-# temp, no2, o3, co, so2, pm25, pm10
-data = [0, 0, 0, 0, 0, 0, 0, 0]
+# timestamp, temp, no2, o3, co, so2, pm25, pm10
+data = [0, 0, 0, 0, 0, 0, 0, 0, 0]
 
-# sleep time
-sleepTime = 1
+# sleep time => for sync
+sleepTime = 0.05
 
 # calibration data of 25-000160 Indoor Sensor
 we_zero = [295, 391, 274, 287]
@@ -102,7 +102,7 @@ if __name__ == '__main__':
         while True:
             # collecting air data
             for x in range(0, 6):
-                print('*******************************')
+            	print('*******************************')
                 if x == 0:
                     # measuring temperature
                     gpio_control(x)
@@ -114,10 +114,10 @@ if __name__ == '__main__':
                     print('Temperature : ' + str(temp_result) + 'degree celcius')
                     # choice temperature each sensor
                     temp = temp_choice(temp_result, x)
-                    data[0] = temp_result
+                    data[1] = temp_result
 
-                # Measuring Working Electrode
                 elif 1 <= x <= 4:
+                    # Measuring Working Electrode
                     gpio_control(x * 2 - 1)
                     ard.readline()
                     ardOut = ard.readline()
@@ -138,22 +138,22 @@ if __name__ == '__main__':
 
                     if x == 1:
                         no2 = ppb_value
-                        data[1] = no2
+                        data[2] = no2
                         print(air_list[x - 1] + ' : ' + str(ppb_value) + 'ppb')
 
                     elif x == 2:
                         o3 = ppb_value / 1000
-                        data[2] = o3
+                        data[3] = o3
                         print(air_list[x - 1] + ' : ' + str(ppb_value / 1000) + 'ppm')
 
                     elif x == 3:
                         co = ppb_value / 1000
-                        data[3] = co
+                        data[4] = co
                         print(air_list[x - 1] + ' : ' + str(ppb_value / 1000) + 'ppm')
 
                     elif x == 4:
                         so2 = ppb_value
-                        data[4] = so2
+                        data[5] = so2
                         print(air_list[x - 1] + ' : ' + str(ppb_value) + 'ppb')
 
                     print('n Table :' + str(temp))
@@ -168,19 +168,19 @@ if __name__ == '__main__':
                     hppcf = 240 * (v**6) - 2491.3 * (v**5) + 9448.7 * (v**4) - 14840 * (v**3) + 10684 * (v**2) + 2211.8 * v + 7.9623
                     ugm3 = .518 + .00274 * hppcf
                     pm25 = ugm3
-                    data[5] = pm25
+                    data[6] = pm25
                     pm10 = ugm3
-                    data[6] = pm10
+                    data[7] = pm10
                     print(air_list[x - 1] + ' : ' + str(ugm3) + 'ug/m^3')
                     print(air_list[x] + ' : ' + str(ugm3) + 'ug/m^3')
                     print('*******************************')
 
             time.sleep(sleepTime)
-
+            data[0]=int(time.time())
             mySqlite = MySqlite('AirData')
             mySqlite.connectDB()
             mySqlite.createTable()
-            mySqlite.insertData(data[0], data[1], data[2], data[3], data[4], data[5], data[6]) # temp, no2, o3, co, so2, pm25, pm10
+            mySqlite.insertData(data[0], data[1], data[2], data[3], data[4], data[5], data[6], data[7]) # timestamp, temp, no2, o3, co, so2, pm25, pm10
             mySqlite.commitDB()
             mySqlite.closeDB()
 

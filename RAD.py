@@ -3,9 +3,12 @@ from Msgtype import *
 # from STATE import *
 # from ResultCode import *
 from globalVar import *
-# from Database import MySqlite
+from Database import MySqlite
 
 class RAD_class:
+    data=MySqlite()
+    temp=data.temp
+
     # msgHeader[0]
     msgtype = SSP_RADTRN
 

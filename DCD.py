@@ -7,7 +7,8 @@ from globalVar import *
 class DCD_class:
 
     msgtype = SSP_DCDNOT
-    payload = None
+    payload={
+    }
     # eId is Connection ID
     eId = ""
 
@@ -15,9 +16,10 @@ class DCD_class:
         packedMsg = {
             "header": {
                 "msgType" : self.msgtype,
-                "msgLen" : self.payload,
+                "msgLen" : len(str(self.payload)),
                 "endpointId" : self.eId
-            }
+            },
+            "payload": self.payload
         }
         return packedMsg
 
@@ -66,8 +68,8 @@ class DCD_class:
             return rc
 
     def init(self):
-        print('check msgType : ' + str(self.msgtype))
-        print("check payload : " + str(self.payload))
+        print('(check) msgType : ' + str(self.msgtype))
+        print("(check) payload : " + str(self.payload))
 
         self.setTimer()
 
