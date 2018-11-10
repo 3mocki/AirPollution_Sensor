@@ -1,6 +1,7 @@
 import serial
 import time
 from Database import *
+from threading import Thread
 
 # air list; ppm is O3 and CO // ppb is NO2, SO2
 air_list = ['no2', 'o3', 'co', 'so2', 'pm25', 'pm10']
@@ -102,7 +103,7 @@ if __name__ == '__main__':
         while True:
             # collecting air data
             for x in range(0, 6):
-            	print('*******************************')
+                print('*******************************')
                 if x == 0:
                     # measuring temperature
                     gpio_control(x)
@@ -111,10 +112,14 @@ if __name__ == '__main__':
                     temp_low = ardOut.rstrip('\n')
                     temp_value = adc_converter(temp_low)
                     temp_result = (float(temp_value) - 0.5) * 100.0
-                    print('Temperature : ' + str(temp_result) + 'degree celcius')
+                    if temp_result < -10:
+                        temp_result = 0
+                    elif temp_result > 50 :
+                    	temp_result = 49
+                    print('Temperature : ' + str(round(temp_result, 3)) + 'degree celcius')
                     # choice temperature each sensor
                     temp = temp_choice(temp_result, x)
-                    data[1] = temp_result
+                    data[1] = round(temp_result, 3)
 
                 elif 1 <= x <= 4:
                     # Measuring Working Electrode
@@ -123,7 +128,7 @@ if __name__ == '__main__':
                     ardOut = ard.readline()
                     we_low = ardOut.rstrip('\n')
                     we_value = adc_converter(we_low)
-                    print(air_list[x - 1] + ' WE : ' + str(we_value) + 'mV')
+                    print(air_list[x - 1] + ' WE : ' + str(round(we_value, 3)) + 'mV')
 
                     # Measuring Auxiliary Electrode
                     gpio_control(x * 2)
@@ -131,30 +136,30 @@ if __name__ == '__main__':
                     ardOut = ard.readline()
                     ae_low = ardOut.rstrip('\n')
                     ae_value = adc_converter(ae_low)
-                    print(air_list[x - 1] + ' AE : ' + str(ae_value) + 'mV')
+                    print(air_list[x - 1] + ' AE : ' + str(round(ae_value, 3)) + 'mV')
 
                     # calculating ppb & ppm
                     ppb_value = ((we_value * 1000 - we_zero[x - 1]) - temp * (ae_value * 1000 - ae_zero[x - 1])) / sens[x - 1]
 
                     if x == 1:
-                        no2 = ppb_value
+                        no2 = round(ppb_value,3)
                         data[2] = no2
-                        print(air_list[x - 1] + ' : ' + str(ppb_value) + 'ppb')
+                        print(air_list[x - 1] + ' : ' + str(round(ppb_value, 3)) + 'ppb')
 
                     elif x == 2:
-                        o3 = ppb_value / 1000
+                        o3 = round(ppb_value / 1000,3)
                         data[3] = o3
-                        print(air_list[x - 1] + ' : ' + str(ppb_value / 1000) + 'ppm')
+                        print(air_list[x - 1] + ' : ' + str(round(ppb_value / 1000, 3)) + 'ppm')
 
                     elif x == 3:
-                        co = ppb_value / 1000
+                        co = round(ppb_value / 1000,3)
                         data[4] = co
-                        print(air_list[x - 1] + ' : ' + str(ppb_value / 1000) + 'ppm')
+                        print(air_list[x - 1] + ' : ' + str(round(ppb_value / 1000, 3)) + 'ppm')
 
                     elif x == 4:
-                        so2 = ppb_value
+                        so2 = round(ppb_value,3)
                         data[5] = so2
-                        print(air_list[x - 1] + ' : ' + str(ppb_value) + 'ppb')
+                        print(air_list[x - 1] + ' : ' + str(round(ppb_value, 3)) + 'ppb')
 
                     print('n Table :' + str(temp))
 
@@ -167,12 +172,12 @@ if __name__ == '__main__':
                     v = pm25_value / 1000
                     hppcf = 240 * (v**6) - 2491.3 * (v**5) + 9448.7 * (v**4) - 14840 * (v**3) + 10684 * (v**2) + 2211.8 * v + 7.9623
                     ugm3 = .518 + .00274 * hppcf
-                    pm25 = ugm3
+                    pm25 = round(ugm3, 3)
                     data[6] = pm25
-                    pm10 = ugm3
+                    pm10 = round(ugm3, 3)
                     data[7] = pm10
-                    print(air_list[x - 1] + ' : ' + str(ugm3) + 'ug/m^3')
-                    print(air_list[x] + ' : ' + str(ugm3) + 'ug/m^3')
+                    print(air_list[x - 1] + ' : ' + str(round(ugm3, 3)) + 'ug/m^3')
+                    print(air_list[x] + ' : ' + str(round(ugm3, 3)) + 'ug/m^3')
                     print('*******************************')
 
             time.sleep(sleepTime)

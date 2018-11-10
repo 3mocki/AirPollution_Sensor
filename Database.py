@@ -15,7 +15,7 @@ class MySqlite:
         self.cursor = self.db.cursor()
 
     def deleteTable(self):
-        self.cursor.execute(' DROP TABLE IF EXISTS ' + self.AirDataTableName)
+        self.cursor.execute(' DELETE FROM ' + self.AirDataTableName + ' WHERE NUM IN(SELECT NUM FROM ' + self.AirDataTableName + ' LIMIT 10) ')
 
     def createTable(self):
         self.cursor.execute(' CREATE TABLE IF NOT EXISTS ' + self.AirDataTableName +
@@ -32,9 +32,9 @@ class MySqlite:
         calResPm25 = ""
         calResPm10 = ""
         # based on a hour (DEFAULT)
-        if self.countData() > 3600:
-            self.cursor.execute(
-                ' DELETE FROM ' + self.AirDataTableName + ' WHERE NUM IN(SELECT NUM FROM ' + self.AirDataTableName + ' LIMIT 1) ')
+        # if self.countData() > 3600:
+        #     self.cursor.execute(
+        #         ' DELETE FROM ' + self.AirDataTableName + ' WHERE NUM IN(SELECT NUM FROM ' + self.AirDataTableName + ' LIMIT 1) ')
         airAvg = self.getAvgData()
         for x in range(0, 6):
             if x == 0:
@@ -55,6 +55,15 @@ class MySqlite:
                             ' set no2aqi =' + str(calResNo2) + ',o3aqi = ' + str(calResO3) + ',co_aqi = ' + str(
             calResCo) + ',so2aqi = ' + str(calResSo2) + ',pm25aqi = ' + str(calResPm25) + ',pm10aqi = ' + str(
             calResPm10) + ' where num = (SELECT MAX(num)  FROM ' + self.AirDataTableName + ');')
+
+    def deleteData(self):
+        self.curser.execute(' DELETE FROM ' + self.AirDataTableName + ' WHERE ')
+
+
+    def getData(self):
+        self.cursor.execute(' SELECT * FROM ' + self.AirDataTableName)
+        self.data = self.cursor.fetchall()
+        #print('Database.py getData() => ', data)
 
     def countData(self):
         # SELECT COUNT(*) FROM TABLE NAME => Check How many data on the table

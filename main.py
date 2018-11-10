@@ -1,9 +1,14 @@
 from SIR import SIR_class
 from DCA import DCA_class
 from RAD import RAD_class
+from Database import MySqlite
 import time
 
 if __name__ == '__main__':
+
+    dat = MySqlite('AirData')
+    dat.connectDB()
+
     try:
         print("-----------Generate SIR-----------")
         sir = SIR_class()
@@ -19,9 +24,11 @@ if __name__ == '__main__':
             rad = RAD_class()
             rad.eId = dca.cId
 
-            print("-----------------------------------")
+            print("----------------------------------")
             rad.init()
+            dat.deleteTable
             time.sleep(10)
+
 
     except KeyboardInterrupt:
         # [Ctrl + C] or [Ctrl + Z]
