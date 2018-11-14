@@ -14,7 +14,7 @@ class MySqlite:
         self.db = sqlite3.connect(self.dbName)
         self.cursor = self.db.cursor()
 
-    def deleteTable(self):
+    def deleteData(self):
         self.cursor.execute(' DELETE FROM ' + self.AirDataTableName + ' WHERE NUM IN(SELECT NUM FROM ' + self.AirDataTableName + ' LIMIT 10) ')
 
     def createTable(self):
@@ -55,9 +55,6 @@ class MySqlite:
                             ' set no2aqi =' + str(calResNo2) + ',o3aqi = ' + str(calResO3) + ',co_aqi = ' + str(
             calResCo) + ',so2aqi = ' + str(calResSo2) + ',pm25aqi = ' + str(calResPm25) + ',pm10aqi = ' + str(
             calResPm10) + ' where num = (SELECT MAX(num)  FROM ' + self.AirDataTableName + ');')
-
-    def deleteData(self):
-        self.curser.execute(' DELETE FROM ' + self.AirDataTableName + ' WHERE ')
 
 
     def getData(self):
