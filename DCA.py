@@ -8,11 +8,11 @@ class DCA_class:
     msgtype = SSP_DCAREQ
 
     payload = {
-        "lat": '32.892425',
-        "lng": '-117.234657',
-        "nat": 'Q30',
-        "state": 'Q99',
-        "city": 'Q16552'
+        "lat": '32.882598',
+        "lng": '-117.234821',
+        "nat": geo_2,
+        "state": geo_3,
+        "city": geo_4
     }
 
     rcvdPayload = None
@@ -50,7 +50,7 @@ class DCA_class:
             self.verifyMsgHeader()
             if self.rcvdPayload != RES_FAILED:
                 print("check")
-                return self.rcvdPayload
+                return self.rcvdMsg()
             else:
                 self.rcvdMsg()
 

@@ -45,15 +45,15 @@ class SIR_class:
         return rt
 
     # 3.1 fnRecvMsg()
-    def rcvdMsgPayload(self):
+    def rcvdPayload(self):
         if rt > 5:
             print("Retry Checking response time")
             self.setTimer()  # 3.2 => go to setTimer 2.0
         else:
             self.verifyMsgHeader()
             if rcvdPayload != RES_FAILED:
-                print("check")
-                return rcvdPayload
+                print("(check) RESULT CODE SUCCESS")
+                return self.rcvdPayload()
 
     def verifyMsgHeader(self): # 3.3.1
         global rcvdPayload
@@ -61,7 +61,7 @@ class SIR_class:
         rcvdPayload = self.json_response['payload']
         # rcvdLength = len(str(rcvdPayload)) # rcvdLenOfPayload
         rcvdeId = self.json_response['header']['endpointId'] # rcvdEndpointId
-        # expLen = rcvdLength - msg.header_size
+        # expLen = rcvdLength - header_size
 
         if rcvdeId == self.eId: # rcvdEndpointId = fnGetTemporarySensorId
             stateCheck = 1
@@ -80,7 +80,7 @@ class SIR_class:
             if self.json_response['payload']['resultCode'] == RESCODE_SSP_SIR_CONFLICT_OF_TEMPORARY_SENSOR_ID:
                 self.setTimer()
             else:
-                print("check quit")
+                print("(check) quit")
                 quit()
 
     def init(self):
@@ -95,5 +95,5 @@ class SIR_class:
         data = response.text
         self.json_response = json.loads(data)
 
-        self.rcvdMsgPayload()
+        self.rcvdPayload()
         self.UnpackMsg()
