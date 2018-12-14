@@ -4,7 +4,6 @@ from Msgtype import *
 # from ResultCode import *
 from globalVar import *
 from Database import MySqlite
-import time
 
 class RAD_class:
 
@@ -75,14 +74,13 @@ class RAD_class:
 
     # def UnpackMsg(self):
 
-
     def init(self):
-
-        db=MySqlite('AirData')
+        db=MySqlite('RAD')
         db.connectDB()
         db.getData()
 
         self.data = db.data
+
         #print('RAD-init() => ', self.data)
         for i in range(0, 10):
             self.row[i] = [self.data[i][1], geo_1, geo_2, geo_3, geo_4, self.data[i][2], self.data[i][3], self.data[i][4], self.data[i][5], self.data[i][6], self.data[i][7], self.data[i][8], self.data[i][9], self.data[i][10], self.data[i][11], self.data[i][12], self.data[i][13], self.data[i][14]]
@@ -92,6 +90,5 @@ class RAD_class:
         print("(check)eId(=cId) : " + str(self.eId))
 
         self.setTimer()
-        db.deleteTable()
-        db.commitDB()
+        db.deleteData()
         db.closeDB()
